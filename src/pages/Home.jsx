@@ -87,16 +87,25 @@ const Home = () => {
       {/* Hero Section */}
       <section id="home" className="min-h-[85vh] px-[6vw] pt-[140px] pb-10 flex flex-col lg:flex-row items-center relative overflow-hidden">
         <div className="absolute -right-[5vw] top-[10%] w-[55vw] h-[55vw] max-w-[700px] max-h-[700px] bg-[radial-gradient(ellipse_at_60%_40%,rgba(108,99,255,0.18)_0%,rgba(56,189,248,0.10)_60%,transparent_80%)] rounded-full blur-[40px] pointer-events-none animate-blob-float"></div>
-        <div className="relative z-[1] max-w-[700px] lg:text-left text-center flex flex-col lg:items-start items-center">
+        <div className="relative z-[10] max-w-[700px] lg:text-left text-center flex flex-col lg:items-start items-center">
           <div className="text-[1rem] tracking-[0.18em] text-accent2 uppercase font-medium flex items-center gap-[10px] mb-[18px] opacity-0 animate-fade-up [animation-delay:0.1s]">
             <span className="w-8 h-[2px] bg-accent2"></span> Assalomu Alaykum, men
           </div>
           <h1 className="font-syne text-[clamp(2.8rem,7vw,5.2rem)] font-extrabold leading-[1.05] mb-[10px] opacity-0 animate-fade-up [animation-delay:0.25s] relative">
             <div className="flex items-center gap-0 lg:justify-start justify-center">
-              Toshkanov<span className="inline-block w-10 h-[2px] bg-grad ml-[14px] align-middle relative rounded-[2px] animate-sparkle-pulse before:content-[''] before:absolute before:w-1.5 before:h-1.5 before:rounded-full before:top-1/2 before:-translate-y-1/2 before:-left-[3px] before:bg-accent before:shadow-[0_0_10px_var(--accent)] after:content-[''] after:absolute after:w-1.5 after:h-1.5 after:rounded-full after:top-1/2 after:-translate-y-1/2 after:-right-[3px] after:bg-accent3 after:shadow-[0_0_10px_var(--accent3)]"></span>
-              <div className="absolute top-1/2 lg:-right-[60px] -right-[40px] w-[50px] sm:w-[50px] h-[50px] sm:h-[50px] -translate-y-1/2">
-                {[0, 0.5, 1, 1.5].map((delay, i) => (
-                  <div key={i} className={`absolute rounded-full animate-particle-float ${i === 0 ? 'w-2 h-2 bg-accent top-0 left-[10px] shadow-[0_0_12px_var(--accent),0_0_24px_rgba(108,99,255,0.4)]' : i === 1 ? 'w-[5px] h-[5px] bg-accent3 top-[15px] left-[30px] shadow-[0_0_10px_var(--accent3),0_0_20px_rgba(56,189,248,0.4)]' : i === 2 ? 'w-1.5 h-1.5 bg-accent2 top-[35px] left-[15px] shadow-[0_0_10px_var(--accent2),0_0_20px_rgba(167,139,250,0.4)]' : 'w-1 h-1 bg-white top-[10px] left-0 shadow-[0_0_8px_#fff,0_0_16px_rgba(255,255,255,0.3)]'}`} style={{ animationDelay: `${delay}s` }}></div>
+              Toshkanov
+              <div className="absolute top-1/2 lg:-right-[30px] -right-[20px] w-12 h-12 -translate-y-1/2 animate-[rotateDots_6s_linear_infinite]">
+                {[...Array(6)].map((_, i) => (
+                  <div 
+                    key={i} 
+                    className={`absolute rounded-full shadow-[0_0_10px_currentColor] ${i % 3 === 0 ? 'w-2 h-2 text-accent bg-accent' : i % 3 === 1 ? 'w-1.5 h-1.5 text-accent3 bg-accent3' : 'w-1 h-1 text-accent2 bg-accent2'}`} 
+                    style={{ 
+                      top: '50%', 
+                      left: '50%', 
+                      transform: `translate(-50%, -50%) rotate(${i * 60}deg) translateY(-18px)`,
+                      opacity: 0.8 + (i * 0.03)
+                    }}
+                  ></div>
                 ))}
               </div>
             </div>
@@ -124,7 +133,7 @@ const Home = () => {
               { icon: 'fa-github', href: '#', title: 'GitHub' }
             ].map((social, i) => (
               <a key={i} href={social.href} title={social.title} target={social.href.startsWith('http') ? '_blank' : undefined} rel="noreferrer" className="w-[42px] h-[42px] rounded-full border-[1.5px] border-border flex items-center justify-center text-muted no-underline text-[1rem] hover:border-accent hover:text-accent hover:-translate-y-[3px] transition-all">
-                <i className={`${social.icon.startsWith('fa-') ? 'fab' : 'fas'} ${social.icon}`}></i>
+                <i className={`${social.icon.includes('envelope') ? 'fas' : 'fab'} ${social.icon}`}></i>
               </a>
             ))}
           </div>
@@ -309,7 +318,7 @@ const Home = () => {
             ].map((item, i) => (
               <div key={i} className="bg-card border-[1.5px] border-border rounded-[14px] p-5 sm:p-[22px] flex gap-4 items-center hover:border-accent hover:translate-x-1 transition-all">
                 <div className="w-[46px] h-[46px] rounded-xl bg-accent/12 flex items-center justify-center text-[1.2rem] text-accent flex-shrink-0">
-                  <i className={`${item.icon.startsWith('fa-') ? 'fab' : 'fas'} ${item.icon}`}></i>
+                  <i className={`${item.icon.includes('envelope') || item.icon.includes('marker') ? 'fas' : 'fab'} ${item.icon}`}></i>
                 </div>
                 <div>
                   <div className="text-[0.78rem] text-muted mb-[3px]">{item.label}</div>
@@ -333,7 +342,7 @@ const Home = () => {
             { icon: 'fa-linkedin-in', href: 'https://www.linkedin.com/login' }
           ].map((social, i) => (
             <a key={i} href={social.href} target={social.href.startsWith('http') ? '_blank' : undefined} rel="noreferrer" className="text-muted text-[1rem] no-underline hover:text-accent transition-colors">
-              <i className={`${social.icon.startsWith('fa-') ? 'fab' : 'fas'} ${social.icon}`}></i>
+              <i className={`${social.icon.includes('envelope') ? 'fas' : 'fab'} ${social.icon}`}></i>
             </a>
           ))}
         </div>
