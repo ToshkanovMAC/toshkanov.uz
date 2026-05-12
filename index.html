@@ -167,8 +167,8 @@
     }
 
     #home {
-      min-height: 100vh;
-      padding: 120px 6vw 60px;
+      min-height: 85vh;
+      padding: 140px 6vw 40px;
       display: flex;
       align-items: center;
       position: relative;
@@ -442,6 +442,41 @@
       }
     }
 
+    @media(max-width: 1024px) {
+      #home {
+        flex-direction: column;
+        text-align: center;
+        padding-top: 140px;
+      }
+      .hero-content {
+        max-width: 100%;
+        margin-bottom: 80px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      .hero-visual {
+        width: 100%;
+        height: 450px;
+        margin-left: 0;
+      }
+      .hero-desc {
+        margin-left: auto;
+        margin-right: auto;
+      }
+      .hero-btns {
+        justify-content: center;
+      }
+      .hero-socials {
+        justify-content: center;
+      }
+      .hero-stats {
+        justify-content: center;
+      }
+      .ts-react { left: 10%; }
+      .ts-next { right: 5%; }
+    }
+
     @media(max-width:680px) {
       .name-orbit {
         width: 36px;
@@ -458,6 +493,15 @@
       .hero-name .sparkle-line {
         width: 24px;
         margin-left: 8px;
+      }
+
+      .tech-stack-float {
+        width: 65px;
+        height: 65px;
+        font-size: 1.8rem;
+      }
+      .tech-stack-float span {
+        font-size: 0.9rem;
       }
     }
 
@@ -586,9 +630,101 @@
       }
     }
 
-    section {
-      padding: 90px 6vw;
+    /* Tech Stack Floating Animation Styles */
+    .hero-visual {
+      flex: 1;
+      height: 550px;
       position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      perspective: 1000px;
+      margin-left: 20px;
+    }
+
+    .tech-stack-float {
+      position: absolute;
+      width: 80px;
+      height: 80px;
+      background: rgba(26, 26, 37, 0.4);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1.5px solid var(--border);
+      border-radius: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.2rem;
+      color: var(--text);
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+      transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      cursor: pointer;
+      z-index: 2;
+    }
+
+    .tech-stack-float:hover {
+      background: var(--grad);
+      border-color: transparent;
+      transform: scale(1.15) rotate(8deg) translateY(-10px);
+      box-shadow: 0 20px 50px rgba(108, 99, 255, 0.4);
+      color: #fff;
+    }
+
+    .tech-stack-float i {
+      filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.1));
+    }
+
+    .tech-stack-float span {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 1.1rem;
+    }
+
+    /* Positioning and Individual Animations */
+    .ts-react { top: 10%; left: 15%; animation: floatTech 6s ease-in-out infinite; }
+    .ts-next { top: 25%; right: 10%; animation: floatTech 8s ease-in-out infinite 1s; }
+    .ts-js { bottom: 25%; left: 5%; animation: floatTech 7s ease-in-out infinite 0.5s; }
+    .ts-ts { bottom: 15%; right: 20%; animation: floatTech 9s ease-in-out infinite 1.5s; }
+    .ts-tailwind { top: 45%; right: 40%; animation: floatTech 7.5s ease-in-out infinite 2s; }
+    .ts-node { top: 60%; left: 35%; animation: floatTech 6.5s ease-in-out infinite 0.8s; }
+
+    @keyframes floatTech {
+      0%, 100% { transform: translateY(0) rotate(0); }
+      50% { transform: translateY(-25px) rotate(5deg); }
+    }
+
+    /* Visual Background Element */
+    .visual-orbit-bg {
+      position: absolute;
+      width: 450px;
+      height: 450px;
+      border: 1px dashed rgba(108, 99, 255, 0.15);
+      border-radius: 50%;
+      animation: slowSpin 20s linear infinite;
+    }
+
+    .visual-orbit-bg::before {
+      content: '';
+      position: absolute;
+      inset: 60px;
+      border: 1px dashed rgba(56, 189, 248, 0.1);
+      border-radius: 50%;
+      animation: slowSpin 15s linear infinite reverse;
+    }
+
+    @keyframes slowSpin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    section {
+      padding: 70px 6vw;
+      position: relative;
+    }
+
+    #about {
+      background: var(--bg2);
+      padding-top: 40px;
     }
 
     .section-label {
@@ -1273,6 +1409,28 @@
           <div class="stat-num">10+</div>
           <div class="stat-label">Texnologiyalar</div>
         </div>
+      </div>
+    </div>
+
+    <div class="hero-visual">
+      <div class="visual-orbit-bg"></div>
+      <div class="tech-stack-float ts-react" title="React">
+        <i class="fab fa-react" style="color: #61DAFB;"></i>
+      </div>
+      <div class="tech-stack-float ts-next" title="Next.js">
+        <span>NEXT</span>
+      </div>
+      <div class="tech-stack-float ts-js" title="JavaScript">
+        <i class="fab fa-js" style="color: #F7DF1E;"></i>
+      </div>
+      <div class="tech-stack-float ts-ts" title="TypeScript">
+        <span style="color: #3178C6; font-size: 1.8rem;">TS</span>
+      </div>
+      <div class="tech-stack-float ts-tailwind" title="Tailwind CSS">
+        <i class="fab fa-css3-alt" style="color: #38B2AC;"></i>
+      </div>
+      <div class="tech-stack-float ts-node" title="Node.js">
+        <i class="fab fa-node-js" style="color: #339933;"></i>
       </div>
     </div>
   </section>
