@@ -115,3 +115,10 @@
 .animate-circular-3 { animation: circular-3 8s ease-in-out infinite; }
 
 @keyframes slowSpin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+}
+
