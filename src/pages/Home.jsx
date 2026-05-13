@@ -1,14 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import html2pdf from 'html2pdf.js';
+import CVTemplate from '../components/CVTemplate';
 
 const Home = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [formSuccess, setFormSuccess] = useState(false);
+  const [isDownloading, setIsDownloading] = useState(false);
+  const cvRef = React.useRef();
 
   useEffect(() => {
     const sections = document.querySelectorAll('section');
     const navLinks = document.querySelectorAll('.nav-links a');
-    
+
     const handleScroll = () => {
       let current = '';
       sections.forEach(s => {
@@ -53,9 +57,33 @@ const Home = () => {
     setTimeout(() => { setFormSuccess(false); }, 4000);
   };
 
+  const handleDownloadCV = () => {
+    setIsDownloading(true);
+    const element = cvRef.current;
+    const opt = {
+      margin: 10,
+      filename: 'Toshkanov_Ulugbek_CV.pdf',
+      image: { type: 'jpeg', quality: 1 },
+      html2canvas: { 
+        scale: 2, 
+        useCORS: true,
+        letterRendering: true
+      },
+      jsPDF: { 
+        unit: 'mm', 
+        format: 'a4', 
+        orientation: 'portrait' 
+      },
+      pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+    };
+
+    html2pdf().from(element).set(opt).save().then(() => {
+      setIsDownloading(false);
+    });
+  };
+
   return (
     <div className="bg-bg text-text font-dm selection:bg-accent/30">
-      {/* Mobile Menu */}
       <div className={`fixed inset-0 z-[110] bg-bg/98 flex-col items-center justify-center gap-9 transition-all duration-300 ${isMobileMenuOpen ? 'flex' : 'hidden'}`}>
         <button className="absolute top-6 right-[6vw] text-3xl cursor-pointer text-muted bg-transparent border-none" onClick={closeMobile}>&#x2715;</button>
         {['home', 'about', 'education', 'portfolio', 'contact'].map((id) => (
@@ -65,7 +93,6 @@ const Home = () => {
         ))}
       </div>
 
-      {/* Nav */}
       <nav className="fixed top-0 left-0 right-0 z-[100] py-[18px] bg-bg/85 backdrop-blur-[18px] border-b border-border">
         <div className="max-w-[1400px] mx-auto px-[6vw] flex items-center justify-between">
           <div className="font-syne font-extrabold text-[1.4rem] bg-grad bg-clip-text text-transparent tracking-tighter">TU.dev</div>
@@ -86,7 +113,6 @@ const Home = () => {
         </div>
       </nav>
 
-      {/* Hero Section */}
       <section id="home" className="min-h-[85vh] py-10 pt-[140px] relative overflow-hidden">
         <div className="absolute -right-[5vw] top-[10%] w-[55vw] h-[55vw] max-w-[700px] max-h-[700px] bg-[radial-gradient(ellipse_at_60%_40%,rgba(108,99,255,0.18)_0%,rgba(56,189,248,0.10)_60%,transparent_80%)] rounded-full blur-[40px] pointer-events-none animate-blob-float"></div>
         <div className="max-w-[1400px] mx-auto px-[6vw] flex flex-col lg:flex-row items-center relative z-[10]">
@@ -99,12 +125,12 @@ const Home = () => {
                 Toshkanov
                 <div className="absolute top-1/2 lg:-right-[30px] -right-[20px] w-12 h-12 -translate-y-1/2 animate-[rotateDots_6s_linear_infinite]">
                   {[...Array(6)].map((_, i) => (
-                    <div 
-                      key={i} 
-                      className={`absolute rounded-full shadow-[0_0_10px_currentColor] ${i % 3 === 0 ? 'w-2 h-2 text-accent bg-accent' : i % 3 === 1 ? 'w-1.5 h-1.5 text-accent3 bg-accent3' : 'w-1 h-1 text-accent2 bg-accent2'}`} 
-                      style={{ 
-                        top: '50%', 
-                        left: '50%', 
+                    <div
+                      key={i}
+                      className={`absolute rounded-full shadow-[0_0_10px_currentColor] ${i % 3 === 0 ? 'w-2 h-2 text-accent bg-accent' : i % 3 === 1 ? 'w-1.5 h-1.5 text-accent3 bg-accent3' : 'w-1 h-1 text-accent2 bg-accent2'}`}
+                      style={{
+                        top: '50%',
+                        left: '50%',
                         transform: `translate(-50%, -50%) rotate(${i * 60}deg) translateY(-18px)`,
                         opacity: 0.8 + (i * 0.03)
                       }}
@@ -126,7 +152,13 @@ const Home = () => {
             <p className="text-[1rem] text-muted leading-[1.75] max-w-[520px] mb-10 opacity-0 animate-fade-up [animation-delay:0.55s]">Zamonaviy, tez ishlovchi va foydalanuvchi uchun qulay web ilovalar yarataman. Toshkent, O'zbekiston.</p>
             <div className="flex gap-3.5 flex-wrap opacity-0 animate-fade-up [animation-delay:0.7s] lg:justify-start justify-center">
               <a href="#portfolio" className="px-8 py-[13px] rounded-lg bg-grad text-white font-semibold no-underline text-[0.95rem] font-syne hover:opacity-88 hover:-translate-y-0.5 transition-all border-none cursor-pointer">Loyihalarimni ko'rish</a>
-              <Link to="/cv" className="px-[30px] py-3 rounded-lg border-[1.5px] border-border text-text no-underline text-[0.95rem] font-medium hover:border-accent hover:-translate-y-0.5 transition-all">CV ko'rish</Link>
+              <button 
+                onClick={handleDownloadCV} 
+                disabled={isDownloading}
+                className="px-[30px] py-3 rounded-lg border-[1.5px] border-border bg-transparent text-text no-underline text-[0.95rem] font-medium hover:border-accent hover:-translate-y-0.5 transition-all cursor-pointer disabled:opacity-50"
+              >
+                {isDownloading ? 'Yuklanmoqda...' : 'CV yuklash'}
+              </button>
             </div>
             <div className="flex gap-4 mt-11 opacity-0 animate-fade-up [animation-delay:0.85s] lg:justify-start justify-center">
               {[
@@ -153,7 +185,7 @@ const Home = () => {
               ))}
             </div>
           </div>
-  
+
           <div className="flex-1 h-[550px] relative flex items-center justify-center perspective-[1000px] lg:ml-5 ml-0 w-full mt-20 lg:mt-0">
             <div className="absolute w-[450px] h-[450px] border border-dashed border-accent/15 rounded-full animate-slow-spin before:content-[''] before:absolute before:inset-[60px] before:border before:border-dashed before:border-accent3/10 before:rounded-full before:animate-slow-spin-reverse"></div>
             {[
@@ -171,8 +203,6 @@ const Home = () => {
           </div>
         </div>
       </section>
-
-      {/* About Section */}
       <section id="about" className="bg-bg2 py-[70px]">
         <div className="max-w-[1400px] mx-auto px-[6vw]">
           <div className="section-label reveal">Men haqimda</div>
@@ -220,7 +250,6 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Education Section */}
       <section id="education" className="bg-bg py-[70px]">
         <div className="max-w-[1400px] mx-auto px-[6vw]">
           <div className="section-label reveal">Ta'lim</div>
@@ -267,7 +296,6 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Portfolio Section */}
       <section id="portfolio" className="bg-bg2 py-[70px]">
         <div className="max-w-[1400px] mx-auto px-[6vw]">
           <div className="section-label reveal">Portfolio</div>
@@ -295,7 +323,6 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Contact Section */}
       <section id="contact" className="bg-bg py-[70px]">
         <div className="max-w-[1400px] mx-auto px-[6vw]">
           <div className="section-label reveal">Bog'lanish</div>
@@ -361,6 +388,10 @@ const Home = () => {
           </div>
         </div>
       </footer>
+      {/* Hidden CV Template for PDF Generation */}
+      <div style={{ position: 'absolute', left: '-9999px', top: '-9999px' }}>
+        <CVTemplate ref={cvRef} />
+      </div>
     </div>
   );
 };
